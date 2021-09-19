@@ -15,7 +15,7 @@ app.get("/api/product", (req, res) => {
   Product.find({}, (err, products) => {
     if (err) {
       res.status(500).send({
-        message: `Error al consultar registros en base de datos: ${err}`,
+        message: `Error al consultar el producto en base de datos: ${err}`,
       });
     }
     if (!products) {
@@ -32,7 +32,7 @@ app.get("/api/product/:productId", (req, res) => {
   Product.findById(productId, (err, product) => {
     if (err) {
       res.status(500).send({
-        message: `Error al consultar registro en base de datos: ${err}`,
+        message: `Error al consultar el producto en base de datos: ${err}`,
       });
     }
     if (!product) {
@@ -56,17 +56,50 @@ app.post("/api/product", (req, res) => {
 
   product.save((err, productStored) => {
     if (err) {
-      res
-        .status(500)
-        .send({ message: `Error al salvar en base de datos: ${err}` });
+      res.status(500).send({
+        message: `Error al salvar el producto en base de datos: ${err}`,
+      });
     }
     res.status(200).send({ product: productStored });
   });
 });
 
-app.put("/api/product/:productId", (req, res) => {});
+app.put("/api/product/:productId", (req, res) => {
+  const productId = req.params.productId;
+  const body = req.body;
 
-app.delete("/api/product/:productId", (req, res) => {});
+  Product.findByIdAndUpdate(productId, body, (err, productUpdated) => {
+    if (err) {
+      res
+        .status(500)
+        .send({ mesaage: `Error al actualizar el producto: ${err}` });
+    }
+
+    res.status(200).send({ product: productUpdated });
+  });
+});
+
+app.delete("/api/product/:productId", (req, res) => {
+  const productId = req.params.productId;
+
+  Product.findById(productId, (err, product) => {
+    if (err) {
+      res.status(500).send({
+        message: `Error al borrar el producto en base de datos: ${err}`,
+      });
+    }
+    product.remove((err) => {
+      if (err) {
+        res.status(500).send({
+          message: `Error al borrar el producto en base de datos: ${err}`,
+        });
+      }
+      res
+        .status(200)
+        .send({ message: "El producto a sido borrado de la base de datos" });
+    });
+  });
+});
 
 mongoose.connect("mongodb://localhost:27017/shop", (err, res) => {
   if (err) {
