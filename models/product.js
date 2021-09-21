@@ -1,7 +1,7 @@
 "use script";
 
-const mongose = require("mongoose");
-const Schema = mongose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const ProductSchema = Schema({
   name: String,
@@ -14,4 +14,4 @@ const ProductSchema = Schema({
   description: String,
 });
 
-module.exports = mongose.model("Product", ProductSchema);
+module.exports = mongoose.model("Product", ProductSchema);
