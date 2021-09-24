@@ -1,14 +1,14 @@
 "use script";
 
 const jwt = require("jwt-simple");
-const momment = require("momment");
+const moment = require("moment");
 const config = require("../config");
 
 const createToken = (user) => {
   const payload = {
     sub: user._id, // Este deberia ser otro codigo generado para mantener la integridad de la BD
-    iat: momment().unix(),
-    exp: momment().add(14, "days").unix(),
+    iat: moment.unix(),
+    exp: moment().add(14, "days").unix(),
   };
 
   return jwt.encode(payload, config.SECRET_TOKEN);
@@ -19,7 +19,7 @@ const decodeToken = (token) => {
     try {
       const payload = jwt.decode(token, config.SECRET_TOKEN);
 
-      if (payload.exp <= momment().unix()) {
+      if (payload.exp <= moment.unix()) {
         reject({
           status: 401,
           message: "El token ha expirado",

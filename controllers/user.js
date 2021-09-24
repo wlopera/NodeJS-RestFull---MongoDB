@@ -3,23 +3,26 @@
 const User = require("../models/user");
 const service = require("../services");
 
-const singUp = (req, res) => {
+const signUp = (req, res) => {
   const user = new User({
     email: req.body.email,
     displayName: req.body.displayName,
+    password: req.body.password,
   });
 
   user.save((err) => {
     if (err) {
       res.status(500).send(`Error al crear el usuario: ${err}`);
     }
+    const token = service.createToken(user);
+    console.log(33333333333333, token, user);
 
-    res.status(200).send({ token: service.createToken(user) });
+    res.status(200).send({ token });
   });
 };
 
-const singIn = (req, res) => {
-  user.find({ email: req.body.email }, (err, user) => {
+const signIn = (req, res) => {
+  User.find({ email: req.body.email }, (err, user) => {
     if (err) {
       return res.status(500).send({ mesage: err });
     }
@@ -36,6 +39,6 @@ const singIn = (req, res) => {
 };
 
 module.exports = {
-  singUp,
-  singIn,
+  signUp,
+  signIn,
 };

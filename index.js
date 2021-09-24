@@ -9,7 +9,7 @@ mongoose.connect(config.db, (err, res) => {
     return console.log(`Error al conectarse a la base de datos: ${err}`);
   }
 
-  console.log("Conexión a la base de datos establecida");
+  console.log(`Conexión a la base de datos ${config.db} establecida`);
 
   app.listen(config.port, () =>
     console.log(`API Rest correindo en HTTP puerto ${config.port}`)
